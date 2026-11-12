@@ -1,0 +1,42 @@
+# Replace <NAMESPACE> with the value of $SN_ICR_NAMESPACE before applying:
+#   sed -i "s/<NAMESPACE>/$SN_ICR_NAMESPACE/" deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftapp
+  labels:
+    app: giftapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giftapp
+  template:
+    metadata:
+      labels:
+        app: giftapp
+    spec:
+      containers:
+        - name: giftapp
+          image: us.icr.io/<NAMESPACE>/giftapp
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3060
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongodb-service:27017
+            - name: JWT_SECRET
+              value: change_me_to_a_long_random_string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gift-app-service
+spec:
+  selector:
+    app: giftapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3060
+  type: LoadBalancer
