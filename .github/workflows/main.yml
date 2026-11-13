@@ -24,7 +24,7 @@ jobs:
 
       - name: Run Linter
         run: |
-          find ./giftlink-backend -name "*.js" -not -path "*/node_modules/*" -exec jshint {} +
+          find ./secondChance-backend -name "*.js" -not -path "*/node_modules/*" -exec jshint {} +
           find ./sentiment -name "*.js" -not -path "*/node_modules/*" -exec jshint {} +
           echo "Linted all the js files successfully"
 
