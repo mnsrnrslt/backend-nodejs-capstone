@@ -1,9 +1,11 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const logger = require('./logger');
 const connectToDatabase = require('./models/db');
 
+const secondChanceItemsRoutes = require('./routes/secondChanceItemsRoutes');
 const giftRoutes = require('./routes/giftRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -14,6 +16,9 @@ const port = process.env.PORT || 3060;
 app.use(cors());
 app.use(express.json());
 
+// Uploaded item images
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+
 // Simple request logger
 app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`);
@@ -21,12 +26,16 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/gifts', giftRoutes);
-app.use('/api/search', searchRoutes);
+app.use('/api/secondchance/items', secondChanceItemsRoutes);
+app.use('/api/secondchance/search', searchRoutes);
 app.use('/api/auth', authRoutes);
 
+// GiftLink routes (kept for the frontend)
+app.use('/api/gifts', giftRoutes);
+app.use('/api/search', searchRoutes);
+
 app.get('/', (req, res) => {
-    res.send('GiftLink backend is running');
+    res.send('SecondChance backend is running');
 });
 
 // Global error handler: receives errors passed with next(e)

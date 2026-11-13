@@ -3,11 +3,15 @@ const connectToDatabase = require('../models/db');
 
 const router = express.Router();
 
-// GET /api/search?name=&category=&condition=&age_years=
+// GET /api/secondchance/search?name=&category=&condition=&age_years=
+// (also mounted on /api/search for the gifts collection)
 router.get('/', async (req, res, next) => {
     try {
         const db = await connectToDatabase();
-        const collection = db.collection('gifts');
+
+        // Pick the collection depending on where the router is mounted
+        const collectionName = req.baseUrl.indexOf('secondchance') !== -1 ? 'secondChanceItems' : 'gifts';
+        const collection = db.collection(collectionName);
 
         // Build the query object only from filters that were actually sent
         const query = {};
@@ -30,8 +34,8 @@ router.get('/', async (req, res, next) => {
             query.age_years = { $lte: parseInt(req.query.age_years, 10) };
         }
 
-        const gifts = await collection.find(query).toArray();
-        res.json(gifts);
+        const items = await collection.find(query).toArray();
+        res.json(items);
     } catch (e) {
         next(e);
     }

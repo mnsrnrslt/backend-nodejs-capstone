@@ -6,8 +6,8 @@ export default function LandingPage() {
 
   return (
     <div className="landing">
-      <h1>GiftLink</h1>
-      <p className="tagline">Share gifts and joy!</p>
+      <h1>SecondChance</h1>
+      <p className="tagline">Give your unused items a second chance!</p>
       <p className="description">
         Give away household items you no longer need and find free furniture,
         kitchenware and more from people nearby. Less waste, more happy homes.
